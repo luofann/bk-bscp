@@ -134,7 +134,8 @@ service Config {
   }
   rpc ListConfigItems(ListConfigItemsReq) returns (ListConfigItemsResp) {
     option (google.api.http) = {
-      get: "/api/v1/config/biz/{biz_id}/apps/{app_id}/config_items"
+      post: "/api/v1/config/biz/{biz_id}/apps/{app_id}/config_items"
+      body: "*"
     };
   }
   rpc ListReleasedConfigItems(ListReleasedConfigItemsReq) returns (ListReleasedConfigItemsResp) {
@@ -387,8 +388,8 @@ service Config {
   }
   rpc ListTemplates(ListTemplatesReq) returns (ListTemplatesResp) {
     option (google.api.http) = {
-      get: "/api/v1/config/biz/{biz_id}/template_spaces/{template_space_id}/"
-           "templates"
+      post: "/api/v1/config/biz/{biz_id}/template_spaces/{template_space_id}/templates/list"
+      body: "*"
     };
   }
   rpc BatchUpsertTemplates(BatchUpsertTemplatesReq) returns (BatchUpsertTemplatesResp) {
@@ -411,9 +412,9 @@ service Config {
       body: "*"
     };
   }
-  rpc DeleteTmplsFromTmplSets(DeleteTmplsFromTmplSetsReq) returns (DeleteTmplsFromTmplSetsResp) {
+  rpc DeleteTmplsFromTmplSets(DeleteTmplsFromTmplSetsReq) returns (BatchDeleteResp) {
     option (google.api.http) = {
-      post: "/api/v1/config/biz/{biz_id}/template_spaces/{template_space_id}/template_set/{template_set_id}/"
+      post: "/api/v1/config/biz/{biz_id}/template_spaces/{template_space_id}/"
             "templates/delete_from_template_sets"
       body: "*"
     };
@@ -439,8 +440,14 @@ service Config {
   }
   rpc ListTmplsOfTmplSet(ListTmplsOfTmplSetReq) returns (ListTmplsOfTmplSetResp) {
     option (google.api.http) = {
-      get: "/api/v1/config/biz/{biz_id}/template_spaces/{template_space_id}/"
-           "template_sets/{template_set_id}/templates"
+      post: "/api/v1/config/biz/{biz_id}/template_spaces/{template_space_id}/"
+            "template_sets/{template_set_id}/templates"
+      body: "*"
+    };
+  }
+  rpc ListTemplateSetsAndRevisions(ListTemplateSetsAndRevisionsReq) returns (ListTemplateSetsAndRevisionsResp) {
+    option (google.api.http) = {
+      get: "/api/v1/config/biz/{biz_id}/template_sets/{template_set_id}/template_revisions"
     };
   }
 
@@ -601,6 +608,12 @@ option (google.api.http) = {
     option (google.api.http) = {
       post: "/api/v1/config/biz/{biz_id}/apps/{app_id}/template_bindings/"
             "conflict_check"
+      body: "*"
+    };
+  }
+  rpc ImportFromTemplateSetToApp(ImportFromTemplateSetToAppReq) returns (ImportFromTemplateSetToAppResp) {
+    option (google.api.http) = {
+      post: "/api/v1/config/biz/{biz_id}/apps/{app_id}/template_bindings/import_template_set"
       body: "*"
     };
   }
@@ -891,7 +904,8 @@ option (google.api.http) = {
   };
   rpc ListKvs(ListKvsReq) returns (ListKvsResp) {
     option (google.api.http) = {
-      get: "/api/v1/config/biz/{biz_id}/apps/{app_id}/kvs"
+      post: "/api/v1/config/biz/{biz_id}/apps/{app_id}/kvs/list"
+      body: "*"
     };
   };
   rpc DeleteKv(DeleteKvReq) returns (DeleteKvResp) {
@@ -1345,7 +1359,7 @@ message ListConfigItemsReq {
   string search_value = 4;
   uint32 start = 5;
   uint32 limit = 6;
-  string ids = 7;
+  repeated uint32 ids = 7;
   bool all = 8;
   bool with_status = 9;
   // ADD、REVISE、DELETE、UNCHANGE
@@ -1850,7 +1864,7 @@ message ListTemplatesReq {
   string search_value = 4;
   uint32 start = 5;
   uint32 limit = 6;
-  string ids = 7;
+  repeated uint32 ids = 7;
   bool all = 8;
 }
 
@@ -1918,14 +1932,11 @@ message AddTmplsToTmplSetsResp {}
 message DeleteTmplsFromTmplSetsReq {
   uint32 biz_id = 1;
   uint32 template_space_id = 2;
-  repeated uint32 template_ids = 3;
-  repeated uint32 template_set_ids = 4;
+  repeated uint32 template_set_ids = 3;
+  repeated uint32 template_ids = 4;
   bool exclusion_operation = 5;
-  uint32 template_set_id = 6;  // 套餐ID, 具体操作的哪个套餐
-  bool no_set_specified = 7;   // 是否未指定套餐, 区分全部套餐和未指定套餐
+  bool no_set_specified = 6;  // 是否未指定套餐, 区分全部套餐和未指定套餐
 }
-
-message DeleteTmplsFromTmplSetsResp {}
 
 message ListTemplatesByIDsReq {
   uint32 biz_id = 1;
@@ -1977,13 +1988,26 @@ message ListTmplsOfTmplSetReq {
   string search_value = 5;
   uint32 start = 6;
   uint32 limit = 7;
-  string ids = 8;
+  repeated uint32 ids = 8;
   bool all = 9;
 }
 
 message ListTmplsOfTmplSetResp {
   uint32 count = 1;
   repeated pbtemplate.Template details = 2;
+}
+
+message ListTemplateSetsAndRevisionsReq {
+  uint32 biz_id = 1;
+  uint32 template_set_id = 2;
+}
+
+message ListTemplateSetsAndRevisionsResp {
+  message Detail {
+    pbtemplate.Template template = 1;
+    repeated pbtr.TemplateRevision template_revision = 2;
+  }
+  repeated Detail details = 1;
 }
 
 message CreateTemplateRevisionReq {
@@ -2290,6 +2314,28 @@ message CheckAppTemplateBindingResp {
   repeated pbatb.Conflict details = 1;
 }
 
+message ImportFromTemplateSetToAppReq {
+  message Binding {
+    message TemplateRevisionBinding {
+      uint32 template_id = 1;
+      uint32 template_revision_id = 2;
+      bool is_latest = 3;
+      string template_name = 4;
+      string template_revision_name = 5;
+    }
+    uint32 template_set_id = 1;
+    uint32 template_space_id = 2;
+    string template_space_name = 3;
+    string template_set_name = 4;
+    repeated TemplateRevisionBinding template_revisions = 5;
+  }
+  uint32 biz_id = 1;
+  uint32 app_id = 2;
+  repeated Binding bindings = 3;
+}
+
+message ImportFromTemplateSetToAppResp {}
+
 message ListTmplBoundCountsReq {
   uint32 biz_id = 1;
   uint32 template_space_id = 2;
@@ -2462,6 +2508,8 @@ message CheckTemplateSetReferencesAppsResp {
     string app_name = 4;
     bool app_exceeds_limit = 5;
     bool template_set_exceeds_limit = 6;
+    uint32 app_exceeds_quantity = 7;
+    uint32 template_set_exceeds_quantity = 8;
   }
   repeated Item items = 1;
 }
@@ -2741,6 +2789,8 @@ message CreateKvReq {
   string kv_type = 4;
   string value = 5;
   string memo = 6;
+  string secret_type = 7;
+  bool secret_hidden = 8;
 }
 
 message CreateKvResp {
@@ -2753,6 +2803,8 @@ message UpdateKvReq {
   string key = 4;
   string memo = 5;
   string value = 6;
+  string secret_type = 7;
+  bool secret_hidden = 8;
 }
 
 message UpdateKvResp {}
@@ -2771,7 +2823,7 @@ message ListKvsReq {
   repeated string kv_type = 11;
   string sort = 12;
   string order = 13;
-  string top_ids = 14;
+  repeated uint32 top_ids = 14;  // 置顶的ID
   // ADD、REVISE、DELETE、UNCHANGE
   repeated string status = 15;
 }
@@ -2814,6 +2866,8 @@ message BatchUpsertKvsReq {
     string kv_type = 2;
     string value = 3;
     string memo = 4;
+    string secret_type = 5;
+    bool secret_hidden = 6;
   }
   uint32 biz_id = 1;
   uint32 app_id = 2;
@@ -3021,6 +3075,8 @@ message CompareKvConflictsResp {
     string kv_type = 2;
     string value = 3;
     string memo = 4;
+    string secret_type = 5;
+    bool secret_hidden = 6;
   }
   repeated Kv exist = 1;
   repeated Kv non_exist = 2;

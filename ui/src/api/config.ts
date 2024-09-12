@@ -28,7 +28,7 @@ export const getDefaultConfigScriptData = () => ({
  */
 export const getConfigList = (biz_id: string, app_id: number, query: ICommonQuery) =>
   http
-    .get(`/config/biz/${biz_id}/apps/${app_id}/config_items`, { params: { ...query, with_status: true } })
+    .post(`/config/biz/${biz_id}/apps/${app_id}/config_items`, { ...query, with_status: true })
     .then((res) => res.data);
 
 /**
@@ -479,7 +479,7 @@ export const createKv = (bizId: string, appId: number, kv: any) =>
  * @returns
  */
 export const getKvList = (bizId: string, appId: number, query: ICommonQuery) =>
-  http.get(`/config/biz/${bizId}/apps/${appId}/kvs`, { params: query }).then((res) => res.data);
+  http.post(`/config/biz/${bizId}/apps/${appId}/kvs/list`, query).then((res) => res.data);
 
 /**
  * 更新kv
@@ -489,8 +489,12 @@ export const getKvList = (bizId: string, appId: number, query: ICommonQuery) =>
  * @param value 配置值
  * @returns
  */
-export const updateKv = (bizId: string, appId: number, key: string, value: string, memo: string) =>
-  http.put(`/config/biz/${bizId}/apps/${appId}/kvs/${key}`, { value, memo });
+export const updateKv = (
+  bizId: string,
+  appId: number,
+  key: string,
+  editContent: { value: string; memo: string; secret_hidden?: boolean },
+) => http.put(`/config/biz/${bizId}/apps/${appId}/kvs/${key}`, editContent);
 
 /**
  * 删除kv
@@ -660,3 +664,14 @@ export const importKvFormYaml = (bizId: string, appId: number, content: string) 
  */
 export const createVersionNameCheck = (bizId: string, appId: number, name: string) =>
   http.get(`/config/biz_id/${bizId}/app_id/${appId}/release/${name}/check`);
+
+/**
+ * 从配置模板导入配置文件
+ * @param bizId 业务ID
+ * @param appId 应用ID
+ * @param bindingId 模板和服务绑定关系ID
+ * @param params 更新参数
+ * @returns
+ */
+export const importConfigFromTemplate = (bizId: string, appId: number, query: any) =>
+  http.post(`/config/biz/${bizId}/apps/${appId}/template_bindings/import_template_set`, query);

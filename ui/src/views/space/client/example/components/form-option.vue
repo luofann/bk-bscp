@@ -53,7 +53,7 @@
     </bk-form-item>
     <bk-form-item>
       <!-- 添加标签 -->
-      <AddLabel ref="addLabelRef" :label-name="labelName" @send-label="formData.labelArr = $event" />
+      <AddLabel ref="addLabelRef" @send-label="formData.labelArr = $event" />
     </bk-form-item>
     <!-- <bk-form-item v-if="p2pShow">
       由于集群列表接口暂不支持，产品将下拉框改为输入框，待后续接口支持后改回下拉框
@@ -76,6 +76,10 @@
       :required="formData.clusterSwitch">
       <bk-input v-model.trim="formData.clusterInfo" :placeholder="$t('请输入')" clearable />
     </bk-form-item>
+    <!-- 启用配置文件筛选 -->
+    <bk-form-item v-if="associateConfigShow">
+      <associate-config @update-rules="formData.rules = $event" />
+    </bk-form-item>
   </bk-form>
 </template>
 
@@ -92,19 +96,20 @@
   import { cloneDeep } from 'lodash';
   import { copyToClipBoard } from '../../../../../utils/index';
   import BkMessage from 'bkui-vue/lib/message';
+  import associateConfig from './associate-config.vue';
 
   const props = withDefaults(
     defineProps<{
       directoryShow?: boolean;
-      labelName?: string;
       p2pShow?: boolean;
       httpConfigShow?: boolean;
+      associateConfigShow?: boolean;
     }>(),
     {
       directoryShow: true,
-      labelName: '标签',
       p2pShow: false,
       httpConfigShow: false,
+      associateConfigShow: false,
     },
   );
 
@@ -127,6 +132,7 @@
     labelArr: [], // 添加的标签
     clusterSwitch: false, // 集群开关
     clusterInfo: 'BCS-K8S-', // 集群ID
+    rules: [], // 文件筛选规则
     // clusterInfo: {
     //   name: '', // 集群名称
     //   value: '', // 集群id

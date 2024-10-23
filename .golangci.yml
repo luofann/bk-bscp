@@ -1,12 +1,6 @@
 run:
   timeout: 10m
   skip-dirs:
-    - bcs-services/bcs-upgrader
-    - bcs-services/bcs-service-prometheus
-    - bcs-network
-    - bcs-runtime/bcs-mesos
-    - bcs-runtime/bcs-k8s/bcs-component/bcs-cc-agent
-    - bcs-runtime/bcs-k8s/bcs-component/bcs-cpuset-device
     - .*/third_party/*
     - test/*
   skip-files:

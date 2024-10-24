@@ -24,9 +24,9 @@ For more detailed information about BSCP, please refer to the BlueKing Container
 
 ## Getting Started
 
-* [Download and Compile](docs/install/source_compile.md)
-* [Installation and Deployment](docs/install/deploy-guide.md)
-* [API Usage Instructions](./docs/apidoc/api.md)
+- [Download and Compile](docs/install/source_compile.md)
+- [Installation and Deployment](docs/install/deploy-guide.md)
+- [API Usage Instructions](./docs/apidoc/api.md)
 
 ## Contributing
 
@@ -36,25 +36,25 @@ If you are interested in the project and would like to contribute and improve it
 
 ## Support
 
-* Read the [source code](https://github.com/TencentBlueKing/bk-bscp)
-* Refer to the [bk-bscp product documentation](https://bk.tencent.com/docs/markdown/BSCP/UserGuide/Introduction/product_introduction.md)
-* Learn about the BlueKing community: BlueKing Community QQ Group 495299374
-* Provide direct feedback through [issues](https://github.com/TencentBlueKing/bk-bscp/issues), we regularly review and respond
-* BlueKing Community [Q&A Feedback](https://bk.tencent.com/s-mart/community)
+- Read the [source code](https://github.com/TencentBlueKing/bk-bscp)
+- Refer to the [bk-bscp product documentation](https://bk.tencent.com/docs/markdown/BSCP/UserGuide/Introduction/product_introduction.md)
+- Learn about the BlueKing community: BlueKing Community QQ Group 495299374
+- Provide direct feedback through [issues](https://github.com/TencentBlueKing/bk-bscp/issues), we regularly review and respond
+- BlueKing Community [Q&A Feedback](https://bk.tencent.com/s-mart/community)
 
 ## FAQ
 
-* [FAQ](https://bk.tencent.com/docs/markdown/ZH/BSCP/UserGuide/FAQ/faq.md)
-* [BlueKing Documentation Center](https://bk.tencent.com/docs/)
+- [FAQ](https://bk.tencent.com/docs/markdown/ZH/BSCP/UserGuide/FAQ/faq.md)
+- [BlueKing Documentation Center](https://bk.tencent.com/docs/)
 
-## Blueking Community
+## BlueKing Community
 
-* [BK-BCS](https://github.com/TencentBlueKing/bk-bcs): BlueKing Container Management Platform is a foundational service platform for orchestrating and managing microservices based on container technology.
-* [BK-CMDB](https://github.com/TencentBlueKing/bk-cmdb): BlueKing Configuration Platform (BlueKing CMDB) is an enterprise-level configuration management platform for assets and applications.
-* [BK-CI](https://github.com/TencentBlueKing/bk-ci): BlueKing Continuous Integration Platform is an open-source continuous integration and continuous delivery system that easily presents your development process to you.
-* [BK-PaaS](https://github.com/TencentBlueKing/bk-PaaS): BlueKing PaaS Platform is an open development platform that allows developers to easily create, develop, deploy, and manage SaaS applications.
-* [BK-JOB](https://github.com/TencentBlueKing/bk-job): BlueKing Job Platform is an operations script management system with massive task concurrency processing capabilities.
-* [BK-SOPS](https://github.com/TencentBlueKing/bk-sops): Standard Operation (SOPS) is a system for orchestrating and executing task flows through a visual graphical interface, a lightweight scheduling and orchestration SaaS product in the BlueKing ecosystem.
+- [BK-BCS](https://github.com/TencentBlueKing/bk-bcs): BlueKing Container Management Platform is a foundational service platform for orchestrating and managing microservices based on container technology.
+- [BK-CMDB](https://github.com/TencentBlueKing/bk-cmdb): BlueKing Configuration Platform (BlueKing CMDB) is an enterprise-level configuration management platform for assets and applications.
+- [BK-CI](https://github.com/TencentBlueKing/bk-ci): BlueKing Continuous Integration Platform is an open-source continuous integration and continuous delivery system that easily presents your development process to you.
+- [BK-PaaS](https://github.com/TencentBlueKing/bk-PaaS): BlueKing PaaS Platform is an open development platform that allows developers to easily create, develop, deploy, and manage SaaS applications.
+- [BK-JOB](https://github.com/TencentBlueKing/bk-job): BlueKing Job Platform is an operations script management system with massive task concurrency processing capabilities.
+- [BK-SOPS](https://github.com/TencentBlueKing/bk-sops): Standard Operation (SOPS) is a system for orchestrating and executing task flows through a visual graphical interface, a lightweight scheduling and orchestration SaaS product in the BlueKing ecosystem.
 
 ## License
 

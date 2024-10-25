@@ -741,6 +741,7 @@ message ListHooksReq {
   uint32 start = 7;
   uint32 limit = 8;
   string searchKey = 9;
+  string top_ids = 10;
 }
 
 message ListHooksResp {

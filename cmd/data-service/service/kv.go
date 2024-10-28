@@ -707,3 +707,18 @@ func (s *Service) checkKVConfigItemExceedsAppLimit(kit *kit.Kit, bizID, appID ui
 
 	return nil
 }
+
+// KvFetchKeysExcluding 获取指定keys后排除的keys
+func (s *Service) KvFetchKeysExcluding(ctx context.Context, req *pbds.KvFetchKeysExcludingReq) (
+	*pbds.KvFetchKeysExcludingResp, error) {
+	kt := kit.FromGrpcContext(ctx)
+
+	keys, err := s.dao.Kv().FetchKeysExcluding(kt, req.BizId, req.AppId, req.GetKeys())
+	if err != nil {
+		return nil, errf.Errorf(errf.DBOpFailed, i18n.T(kt, "get excluded kv failed, err: %s", err))
+	}
+
+	return &pbds.KvFetchKeysExcludingResp{
+		Keys: keys,
+	}, nil
+}
